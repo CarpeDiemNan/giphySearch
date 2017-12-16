@@ -3,4 +3,6 @@
   width:75px;
   background-color:pink;
 }
-
+.navbar-header {
+	font-size: 46px;
+}
