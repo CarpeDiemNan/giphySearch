@@ -3,6 +3,7 @@
 //      VARIABLES
 topics = ["Dog", "Pony", "Puppy", "Cat", "Fish", "Bird"];
 var searchItem = "pony";
+var toggle = "still";
 
 // var queryURLBase = "https://api.giphy.com/v1/gifs/search?api_key=0DCbLqFsuTrcFYsBerOEbG7vYEzptnsg&q=funny+animals&limit=10&offset=0&rating=G&lang=en";
 var queryURLBase = "https://api.giphy.com/v1/gifs/search?api_key=0DCbLqFsuTrcFYsBerOEbG7vYEzptnsg&limit=10&offset=0&rating=G&lang=en&q="+ searchItem;
@@ -31,7 +32,7 @@ function runQuery(queryURL){
 			// clear the wells from the previous run
 			// $("#wellSection").empty();
 			$("#imageArea").empty();
-			
+
 			for(var i = 0; i < 10; i++){
 			console.log(giphyData);	
 
@@ -47,17 +48,40 @@ function runQuery(queryURL){
 			// displaying the rating
 			pictureDiv.append(pOne);
 
-			// Retrieving the URL for the image
+			// Retrieving the still and video URL for the image
+			  
           	var imgURL = giphyData.data[i].images.original_still.url;
-
-          	// Creating an element to hold the image
-          	var image = $("<img>").attr("src", imgURL);
+          	// Creating an element to hold the still image
+          	var stillImage = $("<img>").attr("src", imgURL);
+          	 
+           
+          	var imgVideoURL = giphyData.data[i].images.downsized.url;
+          	// Creating an element to hold the video image
+          	var videoImage = $("<img>").attr("src", imgVideoURL);
+          	
 
           	// Appending the image
-          	pictureDiv.append(image);
+          	pictureDiv.append(stillImage);
 
           	 // Putting the entire movie above the previous movies
-          	$("#imageArea").prepend(pictureDiv);             
+          	$("#imageArea").prepend(pictureDiv);  
+
+          	// toggle between still and video on image click
+          	$(document).on('click', "#imageArea", function(){
+          		// $("#imageArea").empty();
+       
+		    if(toggle == "still"){
+		    	toggle = "video";  	    	 
+		    	 
+		    	pictureDiv.append(videoImage);
+		    	$("#imageArea").html(pictureDiv);
+		    }
+		    else {
+		    	toggle = "still";
+		    	 pictureDiv.append(stillImage);
+		    	$("#imageArea").html(pictureDiv);	    	 
+		    }
+})           
 			}
 		})
 }
@@ -67,18 +91,49 @@ function runQuery(queryURL){
 popButtons();
 // LISTEN for button clicks
 $(document).on('click', ".btn", function(){
-    console.log("This is a " + this.id);
+     
+
     searchItem = this.id;    
     queryURLBase = "https://api.giphy.com/v1/gifs/search?api_key=0DCbLqFsuTrcFYsBerOEbG7vYEzptnsg&limit=10&offset=0&rating=G&lang=en&q="+ searchItem;
-     console.log(queryURLBase);
+      
     runQuery(queryURLBase);
-    // return false;
+     
+})
+$(document).on('click', "#imageArea", function(){
+       // toggle between still and video
+		    if(toggle == "still"){
+		    	toggle = "video";
+		    	alert("video");  // SCOPE PROBLEM
+		    	// var imgVideoURL = giphyData.data[i].images.downsized.url;
+		    	// var image = $("<img>").attr("src", imgVideoURL);
+		    	// pictureDiv.append(image);
+		    	// $("#imageArea").prepend(pictureDiv);
+
+		    }
+		    else {
+		    	toggle = "still";
+		    	alert("still");
+		    	// var imgURL = giphyData.data[i].images.original_still.url;
+		    	// var image = $("<img>").attr("src", imgURL);
+		    	// pictureDiv.append(image);
+		    	// $("#imageArea").prepend(pictureDiv);
+		    }
 })
 
 
+		// // toggle between still and video
+		//     if(toggle == "still"){
+		//     	toggle = "video";
+		//     }
+		//     else {
+		//     	toggle = "still";
+		//     }
 
- // attach content to appropriate well
-			// $("#articleWell-" + i).append(NYTData.response.docs[i].headline.main)
-			// $("#articleWell-" + i).append(NYTData.response.docs[i].pub_date);
-			// $("#articleWell-" + i).append(NYTData.response.docs[i].section_name);
-			// $("#articleWell-" + i).append(NYTData.response.docs[i].web_url);        
+  
+			// Retrieving the still or video URL for the image
+			// if(toggle == "still"){ 
+   //        		var imgURL = giphyData.data[i].images.original_still.url;
+   //        	}
+   //        	else {
+   //        		var imgURL = giphyData.data[i].images.downsized.url;
+   //        	}
